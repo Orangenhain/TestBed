@@ -27,11 +27,7 @@
     NSAssert(self.textView.delegate == self, @"expected us to be textview delegate");
     NSAssert(self.window.delegate == self, @"expected us to be window delegate");
     
-    self.textView.font = [NSFont fontWithName:@"Menlo" size:13];
-    // if you *start* with the mutableString-appendString dance in `-logMessage:` it won't pick up the specified font ... but it will after this
-    [self.textView replaceCharactersInRange:NSMakeRange(0, 0)
-                                 withString:[self startMessage]];
-    
+    [self initializeLogView];
     [self initializeDragAndDropSupport];
 
     self.leftButton.title = @"Do Stuff!";
@@ -55,6 +51,8 @@
 - (IBAction)rightCheckboxClicked:(id)sender {
     [self logMessage:@"Right Checkbox Clicked."];
 }
+
+#pragma mark - Drag & Drop support
 
 - (void) initializeDragAndDropSupport
 {
@@ -100,6 +98,16 @@
 - (void) handleDraggedFile:(NSString *)path
 {
     [self logMessage:[NSString stringWithFormat:@"Dropped file: %@", [path stringByAbbreviatingWithTildeInPath]]];
+}
+
+#pragma mark - Log View handling
+
+- (void) initializeLogView
+{
+    self.textView.font = [NSFont fontWithName:@"Menlo" size:13];
+    // if you *start* with the mutableString-appendString dance in `-logMessage:` it won't pick up the specified font ... but it will after this
+    [self.textView replaceCharactersInRange:NSMakeRange(0, 0)
+                                 withString:[self startMessage]];
 }
 
 - (NSString *) startMessage
