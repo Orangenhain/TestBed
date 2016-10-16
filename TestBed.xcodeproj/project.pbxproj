@@ -250,7 +250,7 @@
 		117848F61DB3ABDE00AEAE8E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_a;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = TestBed/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -262,7 +262,7 @@
 		117848F71DB3ABDE00AEAE8E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_a;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = TestBed/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -290,6 +290,7 @@
 				117848F71DB3ABDE00AEAE8E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
