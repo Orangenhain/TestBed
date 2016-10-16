@@ -32,6 +32,8 @@
     [self.textView replaceCharactersInRange:NSMakeRange(0, 0)
                                  withString:[self startMessage]];
     
+    [self initializeDragAndDropSupport];
+
     self.leftButton.title = @"Do Stuff!";
     self.leftCheckbox.title = @"Use Whatever";
     self.rightButton.title = @"Do Other Stuff.";
@@ -52,6 +54,52 @@
 
 - (IBAction)rightCheckboxClicked:(id)sender {
     [self logMessage:@"Right Checkbox Clicked."];
+}
+
+- (void) initializeDragAndDropSupport
+{
+    [self.window registerForDraggedTypes:@[ NSFilenamesPboardType ]];
+}
+
+- (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
+{
+    NSPasteboard *pboard = [sender draggingPasteboard];
+    // [self logMessage:[NSString stringWithFormat:@"drag entered: %@", pboard.types]];
+    
+    if ( [[pboard types] containsObject:NSFilenamesPboardType] ) {
+        // TODO: add visual feedback
+        return NSDragOperationEvery;
+    }
+    
+    return NSDragOperationNone;
+}
+
+-(void)draggingExited:(id <NSDraggingInfo>)sender
+{
+    // TODO: add visual feedback
+    [self logMessage:@"drag exit"];
+}
+
+- (BOOL)performDragOperation:(id <NSDraggingInfo>)sender
+{
+    NSPasteboard *pboard = [sender draggingPasteboard];
+    
+    if ( [[pboard types] containsObject:NSFilenamesPboardType] ) {
+        NSArray *files = [pboard propertyListForType:NSFilenamesPboardType];
+        
+        for (NSString *path in files) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self handleDraggedFile:path];
+            });
+        }
+    }
+    
+    return YES;
+}
+
+- (void) handleDraggedFile:(NSString *)path
+{
+    [self logMessage:[NSString stringWithFormat:@"Dropped file: %@", [path stringByAbbreviatingWithTildeInPath]]];
 }
 
 - (NSString *) startMessage
