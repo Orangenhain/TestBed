@@ -110,25 +110,35 @@
                                  withString:[self startMessage]];
 }
 
+- (NSString *) timestamp
+{
+    return [self timestampWithDateSyle:NSDateFormatterNoStyle];
+}
+
+- (NSString *) timestampWithDateSyle:(NSDateFormatterStyle)dateStyle
+{
+    return [NSDateFormatter localizedStringFromDate:[NSDate date]
+                                          dateStyle:dateStyle
+                                          timeStyle:NSDateFormatterMediumStyle];
+}
+
 - (NSString *) startMessage
 {
-    return [NSString stringWithFormat:@"TestBed started ... %@\n\n", [NSDate date]];
+    return [NSString stringWithFormat:@"TestBed started ... %@\n\n", [self timestampWithDateSyle:NSDateFormatterMediumStyle]];
 }
 
 - (void) logMessage:(NSString *)msg
 {
-    NSAssert([NSThread currentThread].isMainThread, @"UI changes should only happen on main thread");
-    
     if (![msg hasSuffix:@"\n"]) {
         msg = [msg stringByAppendingString:@"\n"];
     }
     
-    NSString *timestamp = [NSDateFormatter localizedStringFromDate:[NSDate date] dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterMediumStyle];
-    msg = [NSString stringWithFormat:@"%@ - %@", timestamp, msg];
-    
-    [self.textView.textStorage.mutableString appendString:msg];
-    [self.textView scrollToEndOfDocument:nil];
-    
+    msg = [NSString stringWithFormat:@"%@ - %@", [self timestamp], msg];
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.textView.textStorage.mutableString appendString:msg];
+        [self.textView scrollToEndOfDocument:nil];
+    });
 }
 
 @end
